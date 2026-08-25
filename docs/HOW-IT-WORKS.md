@@ -1,63 +1,70 @@
 # How GitHub Authentication Works
 
-This page expands the concise contract in `SKILL.md`. The diagrams are static SVG files so they render directly on GitHub on both phones and desktop browsers.
+The visuals on this page are static SVGs, so they render directly on GitHub on phones and desktop browsers. Each one is generated from a model specific to this skill.
 
-## End-to-end workflow
+## System architecture
 
-![Step-by-step workflow for GitHub Authentication](../assets/workflow.svg)
+![Detailed system map for GitHub Authentication](../assets/system-map.svg)
 
-### 1. Confirm the target service and requested operation
+### Components
 
-At this stage, record the relevant input, the decision made, and the evidence that allows the workflow to continue. If the evidence is missing or contradictory, stop and report the blocker before moving to step 2.
-### 2. Check access without exposing credentials
+- **1. GitHub account:** participates in choose https token ssh or browser login.
+- **2. HTTPS token or SSH choice:** participates in create or select credentials privately.
+- **3. Credential helper or keychain:** participates in store through an approved credential helper.
+- **4. gh authentication:** participates in authenticate gh or git transport.
+- **5. Read-only smoke check:** participates in test identity and repository access.
 
-At this stage, record the relevant input, the decision made, and the evidence that allows the workflow to continue. If the evidence is missing or contradictory, stop and report the blocker before moving to step 3.
-### 3. Inspect current state and narrow the target
+## Actor and data sequence
 
-At this stage, record the relevant input, the decision made, and the evidence that allows the workflow to continue. If the evidence is missing or contradictory, stop and report the blocker before moving to step 4.
-### 4. Preview any consequential change
+![Actor and data sequence for GitHub Authentication](../assets/operation-sequence.svg)
 
-At this stage, record the relevant input, the decision made, and the evidence that allows the workflow to continue. If the evidence is missing or contradictory, stop and report the blocker before moving to step 5.
-### 5. Execute only the approved bounded action
+### 1. Choose HTTPS token SSH or browser login
 
-At this stage, record the relevant input, the decision made, and the evidence that allows the workflow to continue. If the evidence is missing or contradictory, stop and report the blocker before moving to step 6.
-### 6. Re-read the target and report the verified result
+**Primary surface:** `GitHub account`
 
-At this stage, record the relevant input, the decision made, and the evidence that allows the workflow to continue. If the evidence is missing or contradictory, stop and report the blocker before moving to step 6.
+Record the concrete input, the operation performed, and the evidence produced at this stage. Continue only when the output is sufficient for the next stage; otherwise preserve the blocker and stop.
+### 2. Create or select credentials privately
 
-## Safety boundary
+**Primary surface:** `HTTPS token or SSH choice`
 
-![Safety and approval boundaries for GitHub Authentication](../assets/safety-boundary.svg)
+Record the concrete input, the operation performed, and the evidence produced at this stage. Continue only when the output is sufficient for the next stage; otherwise preserve the blocker and stop.
+### 3. Store through an approved credential helper
 
-Before any external write or consequential operation, show the exact target and proposed effect, then obtain explicit authorization.
+**Primary surface:** `Credential helper or keychain`
 
-The workflow must also stop when:
+Record the concrete input, the operation performed, and the evidence produced at this stage. Continue only when the output is sufficient for the next stage; otherwise preserve the blocker and stop.
+### 4. Authenticate gh or Git transport
 
-- The user does not own or control the target.
-- Authentication exists but the requested authority is unclear.
-- Inputs contain private material that is not necessary for the task.
-- A result cannot be verified independently.
-- The requested action conflicts with repository, platform, or organizational policy.
+**Primary surface:** `gh authentication`
 
-## Evidence model
+Record the concrete input, the operation performed, and the evidence produced at this stage. Continue only when the output is sufficient for the next stage; otherwise preserve the blocker and stop.
+### 5. Test identity and repository access
 
-| Stage | Evidence to retain |
-| --- | --- |
-| Scope | The exact request, target, constraints, and success criteria. |
-| Inspection | Source files, tool output, or current-state observations actually used. |
-| Decision | The reason for the selected path and any rejected alternatives that affect safety. |
-| Execution | The artifact or bounded operation result—not merely an attempt message. |
-| Verification | A direct check against the target and acceptance criteria. |
-| Handoff | Remaining risks, withheld actions, and the smallest useful next step. |
+**Primary surface:** `Read-only smoke check`
 
-## Reliability principles
+Record the concrete input, the operation performed, and the evidence produced at this stage. Continue only when the output is sufficient for the next stage; otherwise preserve the blocker and stop.
+### 6. Report status without printing secrets
 
-- Prefer the smallest reversible action that can answer the request.
-- Separate observed facts from interpretations.
-- Never infer permission from a logged-in session alone.
-- Treat failed or missing verification as an incomplete run.
-- Preserve user work and avoid unrelated changes.
+**Primary surface:** `GitHub account`
 
-## Capability boundary
+Record the concrete input, the operation performed, and the evidence produced at this stage. Continue only when the output is sufficient for the next stage; otherwise preserve the blocker and stop.
 
-It does not bypass authentication, silently broaden permissions, or perform unrelated account changes. This package defines how to reason and verify; the adopter is responsible for connecting compatible tools and testing them in their own environment.
+## Example output shape
+
+![Illustrative output for GitHub Authentication](../assets/example-output.svg)
+
+The example is a visual contract: a real run may look different, but it should expose comparable state, provenance, and verification information. It is not presented as evidence of a live external action.
+
+## Decision and stop conditions
+
+![Decision guide for GitHub Authentication](../assets/decision-guide.svg)
+
+The workflow stops when the target is ambiguous, the relevant surface is unavailable or unauthorized, or the final artifact cannot be checked. A logged-in session or successful tool call is not by itself proof that the requested outcome is complete.
+
+## Verification checklist
+
+- Confirm every component shown in the system map exists in the target environment.
+- Trace the actor sequence using actual tool output or artifact state.
+- Compare the result with the example-output information contract.
+- Re-read or reopen the final artifact instead of trusting an attempt message.
+- Report omitted stages, unsupported capabilities, and remaining human decisions.
