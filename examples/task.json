@@ -1,0 +1,3 @@
+{
+  "task": "Use GitHub Authentication to set up github authentication using https tokens, ssh keys, or gh cli login without exposing credentials and return verification evidence."
+}

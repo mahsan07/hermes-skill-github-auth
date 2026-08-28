@@ -1,0 +1,85 @@
+{
+  "protocol_version": "0.1",
+  "skill": {
+    "id": "hermes-skill-github-auth",
+    "display_name": "GitHub Authentication",
+    "description": "Set up GitHub authentication using HTTPS tokens, SSH keys, or gh CLI login without exposing credentials."
+  },
+  "task_profile": {
+    "category": "integration",
+    "architecture": "split",
+    "artifact": "terminal",
+    "inputs": [
+      "GitHub account",
+      "HTTPS token or SSH choice"
+    ],
+    "outputs": [
+      "Read-only smoke check",
+      "Account: mahsan07",
+      "Protocol: HTTPS",
+      "Scopes checked",
+      "Auth OK"
+    ]
+  },
+  "modules": {
+    "memory": {
+      "strategy": "before_after_evidence",
+      "responsibility": "Retain github account plus decisions, observations, and verification evidence needed to resume safely."
+    },
+    "planning": {
+      "strategy": "prepare_execute_verify_plan",
+      "responsibility": "Transform https token or ssh choice into the ordered, bounded stages defined by this skill."
+    },
+    "action": {
+      "strategy": "inspect_preview_authorize_execute_reread",
+      "responsibility": "Advance the workflow through credential helper or keychain while preserving stop conditions and user authority."
+    },
+    "capability": {
+      "strategy": "task_conditioned_minimum_capability_set",
+      "responsibility": "Expose the minimum service operations required for the requested target; writes require an explicit preview gate."
+    }
+  },
+  "execution": {
+    "stages": [
+      "Choose HTTPS token SSH or browser login",
+      "Create or select credentials privately",
+      "Store through an approved credential helper",
+      "Authenticate gh or Git transport",
+      "Test identity and repository access",
+      "Report status without printing secrets"
+    ],
+    "gates": [
+      "scope_and_authority_confirmed",
+      "capability_and_dependency_preflight",
+      "consequential_action_previewed_when_applicable",
+      "output_reopened_and_verified"
+    ]
+  },
+  "verification": {
+    "evidence": [
+      "Account: mahsan07",
+      "Protocol: HTTPS",
+      "Scopes checked",
+      "Auth OK"
+    ],
+    "metrics": [
+      "task_success",
+      "verification_pass_rate",
+      "tool_error_rate",
+      "repair_count",
+      "latency_ms",
+      "estimated_cost_usd"
+    ]
+  },
+  "failure_policy": {
+    "max_repairs": 2,
+    "schema_error": "repair_then_stop",
+    "permission_error": "stop_without_retry",
+    "verification_failure": "report_incomplete"
+  },
+  "maturity": {
+    "level": "executable_contract",
+    "runtime_scope": "validation_and_dry_run_planning",
+    "claim_boundary": "This repository validates and plans the harness contract; it does not claim live service execution or benchmark gains without a connected adapter and measured evidence."
+  }
+}
